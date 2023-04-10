@@ -1,0 +1,47 @@
+version: "3.9"
+services:
+  krisha_parser:
+    image: qmbo/krisha_parser:0.0.2
+    container_name: krisha_parser
+    environment:
+      APP_SEARCH_PAGE: https://krisha.kz/arenda/kvartiry/almaty/?das[_sys.hasphoto]=1&das[live.rooms]=1&das[price][to]=280000&areas=p43.269219,76.930409,43.271226,76.960794,43.270222,76.967488,43.261315,76.967317,43.250651,76.959764,43.245631,76.959764,43.243247,76.957704,43.240988,76.953069,43.239106,76.918736,43.239357,76.909638,43.245318,76.907407,43.247388,76.910497,43.252533,76.912471,43.262068,76.911012,43.264577,76.920196,43.267839,76.930409,43.269219,76.931096,43.269219,76.930409&zoom=13&lat=43.25561&lon=76.92761
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: telegram_messages_sender_broker:49150
+      SPRING_DATA_MONGODB_URI: mongodb://root:password@db_krisha_parser/krisha_parser?authSource=admin
+    ports:
+      - "49012:49007"
+    depends_on:
+      - db_krisha_parser
+    restart: always
+    networks:
+      telegram_messages_sender_net:
+        ipv4_address: 172.28.0.41
+
+  db_krisha_parser:
+    image: mongo:4.4.6
+    container_name: db_krisha_parser
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - /var/lib/docker/containers/krisha_parser/db/data:/data/db
+    ports:
+      - "37017:27017"
+    restart: always
+    networks:
+      telegram_messages_sender_net:
+        ipv4_address: 172.28.0.40
+
+#  mongo-express:
+#    image: mongo-express
+#    restart: always
+#    ports:
+#      - 8081:8081
+#    environment:
+#      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+#      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+#      ME_CONFIG_MONGODB_URL: mongodb://root:password@db_mir_exchange:37017/
+
+networks:
+  telegram_messages_sender_net:
+    external:
+      name: telegram_messages_sender_net
