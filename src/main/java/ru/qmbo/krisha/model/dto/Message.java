@@ -1,4 +1,4 @@
-package ru.qmbo.krisha.dto;
+package ru.qmbo.krisha.model.dto;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

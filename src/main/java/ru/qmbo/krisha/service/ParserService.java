@@ -8,10 +8,11 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import ru.qmbo.krisha.model.Room;
+import ru.qmbo.krisha.model.document.Room;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Map;
 
 
 /**
@@ -23,19 +24,39 @@ import java.util.LinkedList;
 public class ParserService {
     @Value("${app.search.page}")
     private String page;
+    private boolean parse = true;
     private final KrishaService krishaService;
 
     /**
-     * Gets page.
+     * Pars page
      */
 //    @Scheduled(cron = "0 * * * * ?")
     @Scheduled(fixedDelay = 60000, initialDelay = 5000)
-    public void getPage() {
-        try {
-            this.parsPage(Jsoup.connect(this.page).get());
-        } catch (IOException e) {
-            log.error("Error loading page: {}", e.getMessage());
+    public void parsPage() {
+        if (parse) {
+            try {
+                this.parsPage(Jsoup.connect(this.page).get());
+            } catch (IOException e) {
+                log.error("Error loading page: {}", e.getMessage());
+            }
         }
+    }
+
+    public Map<String, ?> getInfo() {
+        return Map.of("pars", parse ? "on" : "off", "page", page);
+    }
+
+    public String setPage(String page) {
+        this.page = page;
+        log.info("Set page {}", page);
+        return this.page;
+    }
+
+    public String setPars(boolean parse) {
+        this.parse = parse;
+        String parsing = this.parse ? "on" : "off";
+        log.info("Parsing page: {}", parsing);
+        return parsing;
     }
 
     private void parsPage(Document document) {

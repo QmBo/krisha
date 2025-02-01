@@ -9,7 +9,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
-import ru.qmbo.krisha.dto.Message;
+import ru.qmbo.krisha.model.dto.Message;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,7 +58,7 @@ public class KafkaProducerConfig {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        props.put(JsonSerializer.TYPE_MAPPINGS, "dto:ru.qmbo.krisha.dto.Message");
+        props.put(JsonSerializer.TYPE_MAPPINGS, "dto:ru.qmbo.krisha.model.dto.Message");
         return props;
     }
 }

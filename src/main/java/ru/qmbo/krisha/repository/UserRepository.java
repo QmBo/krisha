@@ -1,7 +1,7 @@
 package ru.qmbo.krisha.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import ru.qmbo.krisha.model.User;
+import ru.qmbo.krisha.model.document.User;
 
 
 /**
